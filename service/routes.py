@@ -97,14 +97,13 @@ def read_account(account_id):
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
-
-# ... place you code here to UPDATE an account ...
-@app.route("/accounts/<int:account_id>", methods=["POST"])
-def updated_account(account_id):
+@app.route("/accounts/<int:account_id>", methods=["PUT"])
+def update_accounts(account_id):
     """
-    UPDATE ACCOUNT WITH ID
+    Update an Account
+    This endpoint will update an Account based on the posted data
     """
-    app.logger.info("POST to update an Account with id: %s", account_id)
+    app.logger.info("Request to update an Account with id: %s", account_id)
     account = Account.find(account_id)
     if not account:
         abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] could not be found.")
