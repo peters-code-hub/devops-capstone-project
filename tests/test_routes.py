@@ -203,3 +203,12 @@ class TestAccountService(TestCase):
                 response.headers.get(key),
                 value
             )
+    
+    def test_cross_origin_resource_sharing(self):
+        """IT should test cross origin resource sharing"""
+        response = self.client.get(
+            "/",
+            environ_overrides=HTTPS_ENVIRON 
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.headers.get("Access-Control-Allow-Origin"), "*")
