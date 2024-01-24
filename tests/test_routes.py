@@ -189,7 +189,7 @@ class TestAccountService(TestCase):
         """It should request API security headers"""
         response = self.client.get(
             "/",
-            environ_overrides = HTTPS_ENVIRON
+            environ_overrides=HTTPS_ENVIRON
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         headers = {
