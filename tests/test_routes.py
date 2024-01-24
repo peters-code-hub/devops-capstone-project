@@ -147,12 +147,13 @@ class TestAccountService(TestCase):
 
     def test_get_accounts(self):
         """It should Read all Account"""
+        accounts = self._create_accounts(10)
         response = self.client.get(
             f"{BASE_URL}"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
-        self.assertEqual(len(data), 10)
+        self.assertEqual(len(data), len(accounts))
 
     def test_update_account(self):
         """It should Update an existing Account"""
