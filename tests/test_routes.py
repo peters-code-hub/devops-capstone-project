@@ -137,14 +137,14 @@ class TestAccountService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertEqual(data["name"], account.name)
-    
+
     def test_account_not_found(self):
         """It shouldnt find an account"""
         resp = self.client.get(
             f"{BASE_URL}/0", content_type="aplication/json"
         )
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
-    
+
     def test_get_accounts(self):
         """It should Read all Account"""
         accounts = self._create_accounts(10)
@@ -153,14 +153,14 @@ class TestAccountService(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
-        self.assertEqual(len(data), 10)
-    
+        self.assertEqual(len(data), len(accounts))
+
     def test_update_account(self):
         """It should Update an existing Account"""
         # create an Account to update
         test_account = AccountFactory()
         resp = self.client.post(
-            BASE_URL, 
+            BASE_URL,
             json=test_account.serialize())
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
@@ -179,18 +179,18 @@ class TestAccountService(TestCase):
             f"{BASE_URL}/{account.id}"
         )
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
-    
+
     def test_method_not_allowed(self):
         """It should not allow that method"""
         response = self.client.delete(BASE_URL)
-        self.assertEqual(response.status_code,status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_secure_api(self):
         """It should request API security headers"""
         response = self.client.get(
             "/",
             environ_overrides = HTTPS_ENVIRON
-            )
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         headers = {
             'X-Frame-Options': 'SAMEORIGIN',
@@ -203,12 +203,12 @@ class TestAccountService(TestCase):
                 response.headers.get(key),
                 value
             )
-    
+
     def test_cross_origin_resource_sharing(self):
         """IT should test cross origin resource sharing"""
         response = self.client.get(
             "/",
-            environ_overrides=HTTPS_ENVIRON 
+            environ_overrides=HTTPS_ENVIRON
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.headers.get("Access-Control-Allow-Origin"), "*")
